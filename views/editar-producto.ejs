@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vitality/Editar_producto.com</title>
+  <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <header>
+    <div class="menu logo-nav">
+      <a href="/index" class="logo">Vitality</a>
+      <label class="menu-icon"><span class="fas fa-bars icomin"></span></label>
+      <nav class="navigation">
+        <ul>
+          <li><a href="/nosotros">Nosotros</a></li>
+    
+          <li><a href="/contacto">Administrar</a></li>
+          <li>Nutrición para una vida saludable y enérgica</li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <div class="container-contacto">
+    
+    
+<form method="POST" action="/actualizar">
+  <h2>Agregar nuevo producto</h2>
+  <label for="nombre">Nombre:</label>
+  <input type="text" id="nombre" name="nombre" required>
+
+  <label for="codigo">Código:</label>
+  <input type="text" id="codigo" name="codigo" required>
+
+  <label for="laboratorio">Laboratorio:</label>
+  <input type="text" id="laboratorio" name="laboratorio" required>
+
+  <label for="precio">Precio:</label>
+  <input type="number" id="precio" name="precio" required>
+
+  <label for="cantidad">Cantidad:</label>
+  <input type="number" id="cantidad" name="cantidad" required>
+
+  <label for="descripcion">Descripción:</label>
+  <textarea id="descripcion" name="descripcion" required></textarea>
+
+  <button class="ver-todo" type="submit">Agregar</button>
+</form>
+  </div>
+
+    <footer class="footer-section">
+      <div class="copyright-area">
+          <div class="container-footer">
+              <div class="row-footer">
+                  <div class="col-xl-6 col-lg-6 text-center text-lg-left">
+                      <div class="copyright-text">
+                          <p>Copyright &copy; 2020, todos los derechos reservados <a href="/index">Vitality</a></p>
+                      </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                      <div class="footer-menu">
+                          <ul>
+                              <li><a href="/nosotros">Nosotros</a></li>
+                            
+                              <li><a href="/contacto">Administrar</a></li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+          </div> 
+      </div>
+    </footer>  
+
+  
+</body>
+</html>
