@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitality.com</title>
+    <link href="/stylesheets/styles1.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <header>
+      <div class="menu logo-nav">
+        <a href="/" class="logo">Vitality</a>
+        <label class="menu-icon"><span class="fas fa-bars icomin"></span></label>
+        <nav class="navigation">
+          <ul>
+            <li><a href="/listado">Productos</a></li>
+            <li><a href="/login">Administrar</a></li>
+  
+            <li>Nutrición para una vida saludable y enérgica</li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+
+
+
+
+    <main>
+        <div class="contenedor">
+          <a href="/cuadricula" class="button"> Ver en cuadricula</a> 
+          <a href="/filtrado" class="button"> Filtrar</a> 
+          
+          
+      
+          
+            <table class="content-table">
+                <thead>
+              <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Laboratorio</th>
+                <th>Descripción</th>
+                <th>Precio</th> 
+                <th>Imagen</th>
+              </tr>
+            </thead> 
+            <tbody>
+              <tr>
+                <% producto.forEach(product => { %>
+                    <tr>
+                      
+                      <td><%= product.code %></td> 
+                      <td><a href="/producto/<%=product.id%>"><%= product.name %></a></td>
+                      <td><%= product.quantity %></td>
+                      <td><%= product.lab %></td>
+                      <td><%= product.description %></td>
+                      <td><%= product.price %></td>
+                      <td>
+                      <% imagen.forEach(foto => { %>
+                      <% if(product.id == foto.producto_id) { %>
+                        <div class="contenedor-imagen1">
+                          <img src="<%=foto.url%>">
+                      </div>
+                      <% } else { %>
+                         <p></p>
+                      <% }%>
+                      <% }); %>
+                      </td>
+        
+                    <% }); %></td>
+              </tr>
+            </tbody>
+          
+            </table>
+         
+             
+      </main>
+
+
+
+
+
+  <footer class="footer-section1">
+    <div class="copyright-area">
+        <div class="container-footer">
+            <div class="row-footer">
+                <div class="col-xl-6 col-lg-6 text-center text-lg-left">
+                    <div class="copyright-text">
+                        <p>Copyright &copy; 2023, todos los derechos reservados <a href="/">Vitality</a></p>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                    <div class="footer-menu">
+                        <ul>
+                            <li><a href="/login">Administrar</a></li>
+                            <li><a href="/listado">Productos</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </footer>   
+
+
+    
+</body>
+</html>

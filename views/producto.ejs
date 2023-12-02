@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitality.com</title>
+    <link href="/stylesheets/styles1.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <header>
+      <div class="menu logo-nav">
+        <a href="/" class="logo">Vitality</a>
+        <label class="menu-icon"><span class="fas fa-bars icomin"></span></label>
+        <nav class="navigation">
+          <ul>
+            <li><a href="/listado">Productos</a></li>
+            <li><a href="/login">Administrar</a></li>
+  
+            <li>Nutrición para una vida saludable y enérgica</li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+
+
+
+    <main>
+ 
+        <div class="container1">
+            <div class="columna3">
+              <h2>Nombre</h2><p><%= producto.name %></p><br>
+              <h2>Codigo</h2><p><%= producto.code %></p><br>
+              <h2>Laboratorio</h2><p><%= producto.lab %></p><br>
+              <h2>Descripcion</h2><p><%= producto.description %></p><br>
+              
+             
+              
+            </div>
+            <div class="columna4">
+              <h2>Cantidad</h2><p><%= producto.quantity %></p><br>
+                <h2>Precio</h2><p><%= producto.price %></p>
+    
+                <% imagen.forEach(foto => { %>
+                  <% if(producto.id == foto.producto_id) { %>
+                    <div class="contenedor-imagen">
+                      <img src="<%=foto.url%>">
+                  </div>
+                  <% } else { %>
+                     <p></p>
+                  <% }%>
+                  <% }); %>
+    
+               
+    
+                
+                    <a href="/compra" class="button"> Comprar</a>
+               
+            </div>
+        </div>
+        
+             
+            
+    </main>
+   
+
+
+
+
+  <footer class="footer-section">
+    <div class="copyright-area">
+        <div class="container-footer">
+            <div class="row-footer">
+                <div class="col-xl-6 col-lg-6 text-center text-lg-left">
+                    <div class="copyright-text">
+                        <p>Copyright &copy; 2023, todos los derechos reservados <a href="/">Vitality</a></p>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                    <div class="footer-menu">
+                        <ul>
+                            <li><a href="/login">Administrar</a></li>
+                            <li><a href="/listado">Productos</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </footer>   
+
+
+    
+</body>
+</html>

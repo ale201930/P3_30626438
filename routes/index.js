@@ -28,6 +28,160 @@ router.post('/login', (req,res) =>{
   }
 })
 
+
+router.get('/listado', (req, res) => {
+  db.getproducto()  
+    .then(data => {   
+      db.getimagen()
+      .then (images => { 
+        res.render ('listado', { producto: data, imagen: images });
+      })
+      .catch (err => {
+        res.render ('listado', { producto: data, imagen: [] });
+      })
+    })     
+    .catch (err => {
+      res.render ('listado', { producto: [], imagen: [] });
+    });
+})
+
+
+router.get('/nombre', (req, res) => {
+  db.getproductoNO()  
+    .then(data => {   
+      db.getimagen()
+      .then (images => { 
+        res.render ('listado', { producto: data, imagen: images });
+      })
+      .catch (err => {
+        res.render ('listado', { producto: data, imagen: [] });
+      })
+    })     
+    .catch (err => {
+      res.render ('listado', { producto: [], imagen: [] });
+    });
+})
+
+router.get('/descripcion', (req, res) => {
+  db.getproductoDE()  
+    .then(data => {   
+      db.getimagen()
+      .then (images => { 
+        res.render ('listado', { producto: data, imagen: images });
+      })
+      .catch (err => {
+        res.render ('listado', { producto: data, imagen: [] });
+      })
+    })     
+    .catch (err => {
+      res.render ('listado', { producto: [], imagen: [] });
+    });
+})
+
+router.get('/laboratorio', (req, res) => {
+  db.getproductoMO()  
+    .then(data => {   
+      db.getimagen()
+      .then (images => { 
+        res.render ('listado', { producto: data, imagen: images });
+      })
+      .catch (err => {
+        res.render ('listado', { producto: data, imagen: [] });
+      })
+    })     
+    .catch (err => {
+      res.render ('listado', { producto: [], imagen: [] });
+    });
+})
+
+router.get('/categoria', (req, res) => {
+  db.getproductoCA()  
+    .then(data => {   
+      db.getimagen()
+      .then (images => { 
+        res.render ('listado', { producto: data, imagen: images });
+      })
+      .catch (err => {
+        res.render ('listado', { producto: data, imagen: [] });
+      })
+    })     
+    .catch (err => {
+      res.render ('listado', { producto: [], imagen: [] });
+    });
+})
+
+router.get('/cantidad', (req, res) => {
+  db.getproductoPO()  
+    .then(data => {   
+      db.getimagen()
+      .then (images => { 
+        res.render ('listado', { producto: data, imagen: images });
+      })
+      .catch (err => {
+        res.render ('listado', { producto: data, imagen: [] });
+      })
+    })     
+    .catch (err => {
+      res.render ('listado', { producto: [], imagen: [] });
+    });
+})
+
+
+
+
+
+router.get('/cuadricula', (req, res) => {
+  db.getproducto()  
+    .then(data => {   
+      db.getimagen()
+      .then (images => { 
+        res.render ('cuadricula', { producto: data, imagen: images });
+      })
+      .catch (err => {
+        res.render ('cuadricula', { producto: data, imagen: [] });
+      })
+    })     
+    .catch (err => {
+      res.render ('cuadricula', { producto: [], imagen: [] });
+    }); 
+})
+
+
+
+router.get('/producto/:id', (req, res)=>{
+  const id = req.params.id
+  db.getproductoID(id)
+  .then(data =>{
+    db.getimagen()
+    .then (images => { 
+      res.render ('producto', { producto: data[0], imagen: images });
+    })
+    .catch (err => {
+      res.render ('producto', { producto: data[0], imagen: [] });
+    })
+  })     
+  .catch (err => {
+    res.render ('producto', { producto: [], imagen: [] });
+  });
+})
+
+router.get('/filtrado', (req, res) => {
+  res.render('filtrado')
+} )
+
+router.get('/compra', (req, res) => {
+  res.render('compra') 
+} )
+
+
+
+
+
+
+
+
+
+
 //productos
 router.get('/productos', (req, res) => {
   db.getproducto()
@@ -206,9 +360,6 @@ router.get('/editcat/:id', (req, res)=>{
       console.log(err);
       res.render('editcat', {category: []})
     }) 
-
-
-    
 })
 
 router.get('/delete/:id', (req, res)=>{
