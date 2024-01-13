@@ -24,46 +24,27 @@
     </header>
 
     <div class="container-contacto">
-  
+   
 
-        <form action="/compra" id="form" method="post">
-          <h2>Compra</h2>
+        <form action="/begin" id="form" method="post">
+          <h2>Iniciar sesion</h2>
           <br>
-      
-          <label for="producto">Seleccione el producto</label>
-          <br>
-          <select id="categoria" name="producto_id" required>
-            <% producto.forEach(producto => { %>
-              <option value="<%= producto.id %>"><%= producto.name %> <%= producto.price %></option>
-            <% }) %>
-          </select>
-      
-          <br>
-      <br>
-          <label for="client">Seleccione el cliente</label>
-          <br>
-          <select id="categoria" name="cliente_id" required>
-            <% client.forEach(client => { %>
-              <option value="<%= client.id %>"><%= client.email %></option>
-            <% }) %>
-          </select>
-      
-      
-      
-          <br>
-      
-         
-      
-      <br>
-          <label for="cantidad">Indique la cantidad</label>
-          <input type="number" placeholder="Cantidad" name="cantidad" value="" required>
+          <label for="email">Correo electronico</label>
+          <input type="email" name="email" value="" placeholder="Email" required>
       
           
-          <input type="submit" id="button-contacto" value="Comprar" class="button">
+          <label for="password" required>Contraseña</label>
+          <input type="password" name="pass" value="" placeholder="Contraseña" required>
+          
+          <input type="submit" id="button-contacto" value="ENVIAR" class="button" href="/client">
+          
+              
+         
         </form>
       
+       
+      
         </div>
-
 
   <footer class="footer-section">
     <div class="copyright-area">

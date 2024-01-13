@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitality.com</title>
+    <link href="/stylesheets/styles1.css" rel="stylesheet" type="text/css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SBBY61GVSE"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-SBBY61GVSE');
+</script>
+
+<script>
+    function onSubmit(token) {
+        document.getElementById("demo-form").submit();
+    }
+</script>
+
+<body>
+    <header>
+        <div class="menu logo-nav">
+            <a href="/" class="logo">Vitality</a>
+            <label class="menu-icon"><span class="fas fa-bars icomin"></span></label>
+            <nav class="navigation">
+                <ul>
+                    <li><a href="/listado">Productos</a></li>
+                    <li><a href="/login">Administrar</a></li>
+                    <li><a href="/nosotros">Nosotros</a></li>
+
+                    <li>Nutrición para una vida saludable y enérgica</li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container-contacto">
+
+
+        <form action="/client" id="form" method="post">
+            <h2>Registrarse</h2>
+            <br>
+
+            <label for="email">Correo electronico</label>
+            <input type="email" name="email" value="" placeholder="Email" required>
+
+
+            <label for="password" required>Contraseña</label>
+            <input type="password" name="pass" value="" placeholder="Contraseña" required>
+
+            <input type="submit" id="button-contacto" value="ENVIAR" class="button" href="/client">
+
+
+            <div class="g-recaptcha" data-sitekey="6Lf6RkomAAAAAJQTz7cReF5u_ncqmeckT-trRrry"></div>
+
+
+        </form>
+
+
+
+    </div>
+
+
+    <footer class="footer-section">
+        <div class="copyright-area">
+            <div class="container-footer">
+                <div class="row-footer">
+                    <div class="col-xl-6 col-lg-6 text-center text-lg-left">
+                        <div class="copyright-text">
+                            <p>Copyright &copy; 2023, todos los derechos reservados <a href="/">Vitality</a></p>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                        <div class="footer-menu">
+                            <ul>
+                                <li><a href="/login">Administrar</a></li>
+                                <li><a href="/listado">Productos</a></li>
+                                <li><a href="/sesion"> Iniciar sesion</a></li>
+                                <li><a href="/client">Registrarse</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+</body>
+
+</html>

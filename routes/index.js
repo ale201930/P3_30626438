@@ -2,8 +2,226 @@ var express = require('express');
 var router = express.Router();
 const db = require('../db/models');
 require('dotenv').config()
+const IP = require ('ip');
+const { body, validationResult } = require('express-validator');
+const { v4: uuidv4 } = require('uuid');
+const jwt = require('jsonwebtoken');
+const cards = require('../config/cards');
+const database = require('../config/database');
+const request = require ('request');
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.JWT_KEY, (err, user) => {
+      if (err) return res.sendStatus(403);
+      req.user = user;
+      next();
+  });
+};
+
+router.get('/client', (req, res) => {
+  res.render('client')
+} )
+
+router.post('/client', (req, res) => {
+
+  const captcha = req.body['g-recaptcha-response'];
+  const secretKey = process.env.SecretKey;
+  const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captcha}`;
+  const {email, pass} = req.body;
+  db.insertclient(email, pass)
+  .then(() => {
+     res.redirect('client')
+  })
+  .catch(err => {
+    console.log(err);
+  })
+});
+
+router.get('/sesion', (req, res) => {
+  res.render('sesion')
+} )
+
+router.get('/begin', (req, res) => {
+  res.render('begin')
+} )
+
+router.post('/begin', (req, res) => {
+  const email = req.body.email; 
+  const pass = req.body.pass;
+  const bd = require('../db/connection');
+  bd.get('SELECT * FROM client WHERE email = ? AND pass = ?', [email, pass], (err, row) => {
+    if (err) {
+      console.error(err);
+      // Manejar el error
+    } else {
+      if (row) {
+        // Los datos son iguales, redirigir a otra vista
+        res.redirect('/compra');
+      } else {
+        // Los datos no son iguales, manejar según sea necesario
+        res.redirect('/client');
+      }
+    }
+  });
+});
+
+router.get('/compra', (req, res) => {
+  db.getproducto()
+  .then(data =>{
+    db.getclient()
+    .then (cliente => { 
+      res.render ('compra', { producto: data, client: cliente });
+    })
+    .catch (err => {
+      res.render ('compra', { producto: data, client: cliente  });
+    })
+  })     
+  .catch (err => {
+    res.render ('compra', { producto: [], client: [] });
+  });
+} )
+
+router.post('/compra', function(req, res, next) {
+  let date = new Date();
+  let Datetime = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+  let fecha = Datetime;
+  let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  const ip_cliente = ip.split(",")[0];
+  const cliente_id = req.body.cliente_id
+  const producto_id = req.body.producto_id
+  const cantidad = req.body.cantidad
+  const bd = require('../db/connection');
+  let sql = `SELECT price FROM producto WHERE id = ?`;
+  let precio;
+ 
+  bd.get(sql, [producto_id], (err, row) => {
+    if (err) {
+      console.error(err.message);
+    }
+    precio = row.price;
+    console.log(`El precio del producto ${producto_id} es: ${precio}`);
+   
+    let total_pagado = precio * cantidad;
+    console.log(`El resultado de la multiplicación es: ${total_pagado}`);
+
+    db.insertcompra(cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente)
+    .then(() => {
+       res.redirect('payments')
+    })
+    .catch(err => {
+      console.log(err);
+    })
+
+  });
+ 
+})
+
+router.get('/payments', (req, res) => {
+  res.render('payments') 
+})
+
+router.post('/',
+    authenticateToken,
+    body('full-name').notEmpty(),
+    body('card-number').notEmpty().isCreditCard(),
+    body('expiration-month').isLength({ min: 1, max: 2 }),
+    body('expiration-year').isLength({ min: 4, max: 4 }),
+    body('cvv').isLength({ min: 3, max: 4 }),
+    body('amount').notEmpty(),
+    body('currency').isLength({ min: 3, max: 3 }),
+    body('description').notEmpty(),
+    async function (req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const card_number = req.body['card-number'];
+        const full_name = req.body['full-name'];
+
+        if (!cards.cardExists(card_number)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid card number',
+                code: '001',
+            });
+        }
+
+        if (full_name == 'REJECTED') {
+            return res.status(400).json({
+                success: false,
+                message: 'Card rejected',
+                code: '002',
+            });
+        }
+
+        if (full_name == 'ERROR') {
+            return res.status(400).json({
+                success: false,
+                message: 'Card error',
+                code: '003',
+            });
+        }
+
+        if (full_name == 'INSUFFICIENT') {
+            return res.status(400).json({
+                success: false,
+                message: 'Insufficient funds',
+                code: '004',
+            });
+        }
+
+        const data = {
+            transaction_id: uuidv4(),
+            amount: req.body['amount'],
+            currency: req.body['currency'],
+            description: req.body['description'],
+            reference: req.body['reference'] ?? null,
+            date: new Date().toISOString(),
+        }
+
+        await database.insert(data);
+
+        return res.redirect('/payments/' + data.transaction_id);
+    });
+
+    router.get('/cards', function (req, res) {
+      res.json(cards.getList());
+  });
 
 
+  router.get('/api-key', function (req, res) {
+    const payload = {
+        name: 'John Doe',
+        date: new Date().toISOString(),
+    };
+
+    const apiKey = jwt.sign(payload, process.env.JWT_KEY);
+    res.json({ apiKey });
+});
+
+router.get('/:id', async function (req, res) {
+  const id = req.params.id;
+  const transaction = await database.select(id);
+
+  if (!transaction) {
+      return res.status(404).json({
+          success: false,
+          message: 'Transaction not found',
+          code: '005',
+      });
+  }
+
+  return res.status(200).json({
+      success: true,
+      message: 'Payment successful',
+      data: transaction,
+  });
+});
 
 router.get('/', (req, res) => {
   res.render('vista1')

@@ -26,40 +26,49 @@
     <div class="container-contacto">
   
 
-        <form action="/compra" id="form" method="post">
-          <h2>Compra</h2>
+        <form action="/" id="form" method="post">
+          <h2>Pagar</h2>
           <br>
       
-          <label for="producto">Seleccione el producto</label>
-          <br>
-          <select id="categoria" name="producto_id" required>
-            <% producto.forEach(producto => { %>
-              <option value="<%= producto.id %>"><%= producto.name %> <%= producto.price %></option>
-            <% }) %>
-          </select>
+          <label for="full-name">Nombre completo</label>
+          <input type="text" placeholder="Nombre" name="full-name" value="" required>
       
           <br>
-      <br>
-          <label for="client">Seleccione el cliente</label>
-          <br>
-          <select id="categoria" name="cliente_id" required>
-            <% client.forEach(client => { %>
-              <option value="<%= client.id %>"><%= client.email %></option>
-            <% }) %>
-          </select>
-      
-      
-      
-          <br>
-      
-         
-      
-      <br>
-          <label for="cantidad">Indique la cantidad</label>
-          <input type="number" placeholder="Cantidad" name="cantidad" value="" required>
-      
           
-          <input type="submit" id="button-contacto" value="Comprar" class="button">
+          <label for="card-number">Numero de tarjeta</label>
+          <input type="text" placeholder="tarjeta" name="card-number" value="" required>
+      
+          <br>
+      
+          <label for="expiration-month">Mes de expiracion</label>
+          <input type="text" placeholder="Mes" name="expiration-month" value="" required>
+      
+          <br>
+         
+          <label for="expiration-year">Año de expiracion</label>
+          <input type="text" placeholder="Año" name="expiration-year" value="" required>
+      
+          <br>
+          
+          <label for="cvv">Cedula</label>
+          <input type="text" placeholder="Cedula" name="cvv" value="" required>
+      
+          <br>
+      
+          <label for="amount">Monto a Pagar</label>
+          <input type="text" placeholder="Monto" name="amount" value="" required>
+         
+          <br>
+          <label for="currency">Indique la moneda</label>
+          <input type="text" placeholder="moneda" name="currency" value="" required>
+      
+          <br>
+      
+          <label for="description">Descripcion</label>
+          <input type="text" placeholder="descripcion" name="description" value="" required>
+      
+          <br>
+          <input type="submit" id="button-contacto" value="Pagar" class="button">
         </form>
       
         </div>
