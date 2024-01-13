@@ -38,6 +38,30 @@ router.get('/client', (req, res) => {
   res.render('client')
 } )
 
+router.get('/tabclient', (req, res) => {
+  db.getclient()
+    .then(data => {        
+      console.log(data)
+      res.render('tabclient', { client: data });
+  })
+  .catch(err => {
+      res.render('tabclient', { client: [] });
+  })
+
+});
+
+router.get('/tabcompra', (req, res) => {
+  db.getcompra()
+    .then(data => {        
+      console.log(data)
+      res.render('tabcompra', { compra: data });
+  })
+  .catch(err => {
+      res.render('tabcompra', { compra: [] });
+  })
+
+});
+
 router.post('/client', (req, res) => {
 
   const captcha = req.body['g-recaptcha-response'];
@@ -226,6 +250,8 @@ router.get('/categoria', (req, res) => {
       res.render ('listado', { producto: [], imagen: [] });
     });
 })
+
+
 
 router.get('/cantidad', (req, res) => {
   db.getproductoPO()  
