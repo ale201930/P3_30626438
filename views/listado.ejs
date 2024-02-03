@@ -13,9 +13,9 @@
         <label class="menu-icon"><span class="fas fa-bars icomin"></span></label>
         <nav class="navigation">
           <ul>
-            <li><a href="/listado">Productos</a></li>
-            <li><a href="/login">Administrar</a></li>
-  
+            <li><a href="/cuadricula">Productos</a></li>
+            <li><a href="/sesion">Puntuar</a></li>
+            <li><a href="/nosotros">Nosotros</a></li>
             <li>Nutrición para una vida saludable y enérgica</li>
           </ul>
         </nav>
@@ -43,6 +43,7 @@
                 <th>Laboratorio</th>
                 <th>Descripción</th>
                 <th>Precio</th> 
+                <th>Puntuacion</th>
                 <th>Imagen</th>
               </tr>
             </thead> 
@@ -57,6 +58,16 @@
                       <td><%= product.lab %></td>
                       <td><%= product.description %></td>
                       <td><%= product.price %></td>
+                      <td>
+                        <% promedio.forEach(promedio => { %>
+                        <% if(product.id == promedio.producto_id) { %>
+                          <%= promedio.promedio %>
+                          
+                        <% } else { %>
+                           <p></p>
+                        <% }%>
+                        <% }); %>
+                      </td>
                       <td>
                       <% imagen.forEach(foto => { %>
                       <% if(product.id == foto.producto_id) { %>
@@ -94,8 +105,10 @@
                 <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
                     <div class="footer-menu">
                         <ul>
-                            <li><a href="/login">Administrar</a></li>
-                            <li><a href="/listado">Productos</a></li>
+                          <li><a href="/login">Administrar</a></li>
+                          <li><a href="/listado">Productos</a></li>
+                         
+                          <li><a href="/client">Registrarse</a></li>
 
                         </ul>
                     </div>

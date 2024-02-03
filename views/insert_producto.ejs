@@ -22,10 +22,12 @@
         <label for="price">Precio</label>
         <input type="text" name="price" value="" placeholder="Precio del Producto" required>
         <label for="category_id">Categoría</label>
-        <select name="category_id" required>
-            <option value="1">Marca</option>
-            <option value="2">Generico</option>
-        </select>
+    
+        <select id="categoria" name="category_id" required>
+            <% category.forEach(category => { %>
+              <option value="<%= category.id %>"><%= category.name %></option>
+            <% }) %>
+          </select>
         <input type="submit" value="Insertar" href="/index">
     
     </form>

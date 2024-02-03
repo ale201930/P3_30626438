@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 const cards = require('../config/cards');
 const database = require('../config/database');
 const request = require ('request');
+const nodemailer = require('nodemailer');
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -21,6 +22,74 @@ const authenticateToken = (req, res, next) => {
       next();
   });
 };
+
+router.get('/sesion', (req, res) => {
+  res.render('sesion')
+} )
+
+router.post('/sesion', (req, res) => {
+  const email = req.body.email; 
+  const pass = req.body.pass;
+  const bd = require('../db/connection');
+  bd.get('SELECT * FROM client WHERE email = ? AND pass = ?', [email, pass], (err, row) => {
+    if (err) {
+      console.error(err);
+      // Manejar el error
+    } else {
+      if (row) {
+        // Los datos son iguales, redirigir a otra vista
+        res.redirect('/puntaje');
+      } else {
+        // Los datos no son iguales, manejar según sea necesario
+        res.redirect('/client');
+      }
+    }
+  });
+});
+
+
+router.get('/puntaje', (req, res)=>{
+  db.getproducto()
+  .then(data => {        
+    console.log(data)
+    res.render('puntaje', { producto: data });
+})
+.catch(err => {
+    res.render('puntaje', { producto: [] });
+})
+})
+
+router.post('/puntaje', (req, res) => {
+  const {producto_id, puntos} = req.body;
+  if (puntos >= 6 || puntos <= 0) {
+    db.getproducto()
+    .then(data => {        
+      console.log(data)
+      res.render('puntaje', { producto: data });
+  })
+  .catch(err => {
+      res.render('puntaje', { producto: [] });
+  })
+  } else {
+    db.insertpuntaje(puntos, producto_id)
+    .then(() => {
+       res.redirect('puntuado')
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+});
+
+router.get('/puntuado', (req, res) => {
+ 
+  res.render('puntuado')
+
+})
+
+
+
+
 
 router.get('/', (req, res) => {
   res.render('vista1')
@@ -59,7 +128,6 @@ router.get('/tabcompra', (req, res) => {
   .catch(err => {
       res.render('tabcompra', { compra: [] });
   })
-
 });
 
 router.post('/client', (req, res) => {
@@ -75,11 +143,36 @@ router.post('/client', (req, res) => {
   .catch(err => {
     console.log(err);
   })
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.hostemail,
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.useremail,
+        pass: process.env.passemail
+    }
+  });
+
+  const mailOptions = {
+    from: process.env.useremail,
+    //Lista de correos 
+    to: [email],
+    subject: 'Task 4: Additional features ',
+    text: "Bienvenido, se ha registrado exitosamente en Vitality.com"
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+        console.log(error);
+    } else {
+        console.log('Correo electrónico enviado: ' + info.response);
+    }});
+
+
 });
 
-router.get('/sesion', (req, res) => {
-  res.render('sesion')
-} )
+
 
 router.get('/begin', (req, res) => {
   res.render('begin')
@@ -132,8 +225,17 @@ router.post('/compra', function(req, res, next) {
   const cantidad = req.body.cantidad
   const bd = require('../db/connection');
   let sql = `SELECT price FROM producto WHERE id = ?`;
+  let SQL = `SELECT email FROM client WHERE id = ?`;
   let precio;
- 
+ let email;
+
+ bd.get(SQL, [cliente_id], (err, row) => {
+   if (err) {
+     console.error(err.message);
+   }
+   email = row.email;
+ });
+
   bd.get(sql, [producto_id], (err, row) => {
     if (err) {
       console.error(err.message);
@@ -152,9 +254,70 @@ router.post('/compra', function(req, res, next) {
       console.log(err);
     })
 
+    const transporter = nodemailer.createTransport({
+      host: process.env.hostemail,
+      port: 465,
+      secure: true,
+      auth: {
+          user: process.env.useremail,
+          pass: process.env.passemail
+      }
+    });
+    const mailOptions = {
+      from: process.env.useremail,
+      //Lista de correos 
+      to: [email],
+      subject: 'Task 4: Additional features ',
+      text: "Felicidades, ha completado una compra exitosamente en Vitality.com"
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+          console.log(error);
+      } else {
+          console.log('Correo electrónico enviado: ' + info.response);
+      }});
+
+
   });
- 
+
 })
+
+
+
+router.get('/recuperativo', (req, res) => {
+ 
+  res.render('recuperativo')
+
+})
+
+router.post('/recuperativo', (req, res) => {
+  const email = req.body.email; 
+  const transporter = nodemailer.createTransport({
+    host: process.env.hostemail,
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.useremail,
+        pass: process.env.passemail
+    }
+  });
+  const mailOptions = {
+    from: process.env.useremail,
+    //Lista de correos 
+    to: [email],
+    subject: 'Task 4: Additional features ',
+    text: "Ingrese en el siguiente link para recuperar su contraseña: https://lavamovil.onrender.com/client"
+  };
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+        console.log(error);
+    } else {
+        console.log('Correo electrónico enviado: ' + info.response);
+    }});
+
+    res.redirect('/sesion');
+});
+
 
 
 
@@ -170,106 +333,212 @@ router.post('/login', (req,res) =>{
 })
 
 
+
 router.get('/listado', (req, res) => {
+  
   db.getproducto()  
-    .then(data => {   
+    .then(data => { 
+
       db.getimagen()
       .then (images => { 
-        res.render ('listado', { producto: data, imagen: images });
+
+        db.getpuntaje()
+        .then (promedio => { 
+
+          res.render ('listado', { producto: data, imagen: images, promedio: promedio });
+        })
+        .catch (err => {
+          res.render ('listado', { producto: data, imagen: [], promedio: [] });
+        })
+
       })
       .catch (err => {
-        res.render ('listado', { producto: data, imagen: [] });
+        res.render ('listado', { producto: data, imagen: [], promedio: [] });
       })
-    })     
+
+    })    
+
     .catch (err => {
       res.render ('listado', { producto: [], imagen: [] });
     });
 })
+
+
+
+
+
+ 
 
 
 router.get('/nombre', (req, res) => {
   db.getproductoNO()  
-    .then(data => {   
-      db.getimagen()
-      .then (images => { 
-        res.render ('listado', { producto: data, imagen: images });
+  .then(data => { 
+
+    db.getimagen()
+    .then (images => { 
+
+      db.getpuntaje()
+      .then (promedio => { 
+
+        res.render ('listado', { producto: data, imagen: images, promedio: promedio });
       })
       .catch (err => {
-        res.render ('listado', { producto: data, imagen: [] });
+        res.render ('listado', { producto: data, imagen: [], promedio: [] });
       })
-    })     
+
+    })
     .catch (err => {
-      res.render ('listado', { producto: [], imagen: [] });
-    });
+      res.render ('listado', { producto: data, imagen: [], promedio: [] });
+    })
+
+  })    
+
+  .catch (err => {
+    res.render ('listado', { producto: [], imagen: [] });
+  });
 })
 
 router.get('/descripcion', (req, res) => {
   db.getproductoDE()  
-    .then(data => {   
-      db.getimagen()
-      .then (images => { 
-        res.render ('listado', { producto: data, imagen: images });
+  .then(data => { 
+
+    db.getimagen()
+    .then (images => { 
+
+      db.getpuntaje()
+      .then (promedio => { 
+
+        res.render ('listado', { producto: data, imagen: images, promedio: promedio });
       })
       .catch (err => {
-        res.render ('listado', { producto: data, imagen: [] });
+        res.render ('listado', { producto: data, imagen: [], promedio: [] });
       })
-    })     
+
+    })
     .catch (err => {
-      res.render ('listado', { producto: [], imagen: [] });
-    });
+      res.render ('listado', { producto: data, imagen: [], promedio: [] });
+    })
+
+  })    
+
+  .catch (err => {
+    res.render ('listado', { producto: [], imagen: [] });
+  });
 })
 
 router.get('/laboratorio', (req, res) => {
   db.getproductoMO()  
-    .then(data => {   
-      db.getimagen()
-      .then (images => { 
-        res.render ('listado', { producto: data, imagen: images });
+  .then(data => { 
+
+    db.getimagen()
+    .then (images => { 
+
+      db.getpuntaje()
+      .then (promedio => { 
+
+        res.render ('listado', { producto: data, imagen: images, promedio: promedio });
       })
       .catch (err => {
-        res.render ('listado', { producto: data, imagen: [] });
+        res.render ('listado', { producto: data, imagen: [], promedio: [] });
       })
-    })     
+
+    })
     .catch (err => {
-      res.render ('listado', { producto: [], imagen: [] });
-    });
+      res.render ('listado', { producto: data, imagen: [], promedio: [] });
+    })
+
+  })    
+
+  .catch (err => {
+    res.render ('listado', { producto: [], imagen: [] });
+  });
 })
 
 router.get('/categoria', (req, res) => {
   db.getproductoCA()  
-    .then(data => {   
-      db.getimagen()
-      .then (images => { 
-        res.render ('listado', { producto: data, imagen: images });
+  .then(data => { 
+
+    db.getimagen()
+    .then (images => { 
+
+      db.getpuntaje()
+      .then (promedio => { 
+
+        res.render ('listado', { producto: data, imagen: images, promedio: promedio });
       })
       .catch (err => {
-        res.render ('listado', { producto: data, imagen: [] });
+        res.render ('listado', { producto: data, imagen: [], promedio: [] });
       })
-    })     
+
+    })
     .catch (err => {
-      res.render ('listado', { producto: [], imagen: [] });
-    });
+      res.render ('listado', { producto: data, imagen: [], promedio: [] });
+    })
+
+  })    
+
+  .catch (err => {
+    res.render ('listado', { producto: [], imagen: [] });
+  });
 })
 
 
 
 router.get('/cantidad', (req, res) => {
   db.getproductoPO()  
-    .then(data => {   
-      db.getimagen()
-      .then (images => { 
-        res.render ('listado', { producto: data, imagen: images });
+  .then(data => { 
+
+    db.getimagen()
+    .then (images => { 
+
+      db.getpuntaje()
+      .then (promedio => { 
+
+        res.render ('listado', { producto: data, imagen: images, promedio: promedio });
       })
       .catch (err => {
-        res.render ('listado', { producto: data, imagen: [] });
+        res.render ('listado', { producto: data, imagen: [], promedio: [] });
       })
-    })     
+
+    })
     .catch (err => {
-      res.render ('listado', { producto: [], imagen: [] });
-    });
+      res.render ('listado', { producto: data, imagen: [], promedio: [] });
+    })
+
+  })    
+
+  .catch (err => {
+    res.render ('listado', { producto: [], imagen: [] });
+  });
 })
 
+router.get('/promedio', (req, res) => {
+  db.getproductoPU()  
+  .then(data => { 
 
+    db.getimagen()
+    .then (images => { 
+
+      db.getpuntaje()
+      .then (promedio => { 
+
+        res.render ('listado', { producto: data, imagen: images, promedio: promedio });
+      })
+      .catch (err => {
+        res.render ('listado', { producto: data, imagen: [], promedio: [] });
+      })
+
+    })
+    .catch (err => {
+      res.render ('listado', { producto: data, imagen: [], promedio: [] });
+    })
+
+  })    
+
+  .catch (err => {
+    res.render ('listado', { producto: [], imagen: [] });
+  });
+})
 
 
 
@@ -293,20 +562,49 @@ router.get('/cuadricula', (req, res) => {
 
 router.get('/producto/:id', (req, res)=>{
   const id = req.params.id
+  const producto_id = id
+  const bd = require('../db/connection');
+  let promedio
+
+  bd.get('SELECT SUM(puntos) AS total, COUNT(puntos) AS num_elementos FROM calificacion WHERE producto_id = ?', [id], (err, row) => {
+    if (err) {
+      console.error(err.message);
+    }
+    
+    const total = row.total;
+    const num_elementos = row.num_elementos;
+    
+    promedio = total / num_elementos;
+    
+    // Guardar el promedio en otra tabla
+    bd.run('INSERT OR REPLACE INTO puntaje (id, promedio, producto_id) VALUES (?, ?, ?)', [id, promedio, producto_id], (err) => {
+      if (err) {
+        console.error(err.message);
+      }
+      console.log('Promedio guardado en otra_tabla');
+    });
+  });
+
   db.getproductoID(id)
   .then(data =>{
     db.getimagen()
     .then (images => { 
-      res.render ('producto', { producto: data[0], imagen: images });
+      res.render ('producto', { producto: data[0], imagen: images, promedio: promedio });
     })
     .catch (err => {
-      res.render ('producto', { producto: data[0], imagen: [] });
+      res.render ('producto', { producto: data[0], imagen: [], promedio: promedio });
     })
   })     
   .catch (err => {
-    res.render ('producto', { producto: [], imagen: [] });
+    res.render ('producto', { producto: [], imagen: [], promedio: promedio });
   });
 })
+
+
+
+
+
+
 
 router.get('/filtrado', (req, res) => {
   res.render('filtrado')
@@ -377,8 +675,15 @@ router.get('/insertima', (req, res) => {
 
 //insertar producto
 router.get('/insert_producto', (req, res) => {
-  res.render('insert_producto')
-} )
+  db.getcategory()
+  .then(data => {
+    console.log (data)
+    res.render('insert_producto', {category: data});
+  })
+  .catch(err => {
+    res.render('insert_producto', {category: []});
+  })
+});
 
 
 router.post('/insert_producto', (req, res) => {

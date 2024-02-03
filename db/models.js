@@ -8,6 +8,7 @@ let querys = {
     getproductoCA: 'SELECT * FROM producto ORDER BY category_id ASC',
     getproductoMO: 'SELECT * FROM producto ORDER BY lab ASC',
     getproductoPO: 'SELECT * FROM producto ORDER BY quantity ASC',
+    getproductoPU: 'SELECT * FROM producto JOIN puntaje ON producto.id = puntaje.producto_id ORDER BY promedio DESC',
     getimagenID: 'SELECT * FROM imagen WHERE id = ?',
     insertproducto: 'INSERT INTO producto (code, name, lab, quantity, description, price, category_id) VALUES(?, ?, ?, ?, ?, ?, ?)',
     getimagen: 'SELECT * FROM imagen',
@@ -24,8 +25,9 @@ let querys = {
     insertclient: 'INSERT INTO client (email, pass) VALUES(?, ?)',
     getclient: 'SELECT * FROM client',
     getcompra: 'SELECT * FROM compra',
-    insertcompra: 'INSERT INTO compra (cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente) VALUES(?, ?, ?, ?, ?, ?)'
-
+    insertcompra: 'INSERT INTO compra (cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente) VALUES(?, ?, ?, ?, ?, ?)',
+    insertpuntaje: 'INSERT INTO calificacion (puntos, producto_id) VALUES(?, ?)',
+    getpuntaje: 'SELECT * FROM puntaje'
 }
 module.exports = {
     getproducto(){
@@ -35,6 +37,34 @@ module.exports = {
                 resolve(rows);
             })
         })
+    },
+
+    getproductoPU(){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getproductoPU, (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    getpuntaje(){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getpuntaje, (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    insertpuntaje(puntos, producto_id){
+        return new Promise((resolve, reject) => {
+            db.run(querys.insertpuntaje, [puntos, producto_id], (err) => {
+                if(err) reject(err);
+                    resolve()
+            })
+        })
+    
     },
 
     insertcompra(cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente){

@@ -17,8 +17,8 @@
             <label class="menu-icon"><span class="fas fa-bars icomin"></span></label>
             <nav class="navigation">
                 <ul>
-                    <li><a href="/listado">Productos</a></li>
-                    <li><a href="/login">Administrar</a></li>
+                    <li><a href="/cuadricula">Productos</a></li>
+                    <li><a href="/sesion">Puntuar</a></li>
                     <li><a href="/nosotros">Nosotros</a></li>
 
                     <li>Nutrición para una vida saludable y enérgica</li>
@@ -30,21 +30,21 @@
     <div class="container-contacto">
    
 
-        <form action="/login" id="form" method="post">
-          <h2>Iniciar sesion</h2>
-          <br>
-          <label for="username">Correo electronico</label>
+        <form action="/sesion" id="form" method="post">
+            <h2>Iniciar sesion</h2>
+            <br>
+            <label for="email">Correo electronico</label>
+            <input type="email" name="email" value="" placeholder="Email" required>
         
-          <input type="text" placeholder="Email" name="user" value="" required>
-      
-          <label for="password" required>Contraseña</label>
-          <input type="password" placeholder="Contraseña" name="pass" value="" required>
-          
-          <input type="submit" id="button-contacto" value="ENVIAR" class="button">
-          
-              
-         
-        </form>
+            
+            <label for="password" required>Contraseña</label>
+            <input type="password" name="pass" value="" placeholder="Contraseña" required>
+            
+            <input type="submit" id="button-contacto" value="ENVIAR" class="button" href="/client">
+            
+            <a href="/recuperativo">Recuperar Contraseña</a>
+           
+          </form>
       
        
       
@@ -64,9 +64,9 @@
                         <div class="footer-menu">
                             <ul>
                                 <li><a href="/login">Administrar</a></li>
-                                <li><a href="/listado">Productos</a></li>
-                                <li><a href="/sesion"> Iniciar sesion</a></li>
-                                <li><a href="/client">Registrarse</a></li>
+                            <li><a href="/listado">Productos</a></li>
+                           
+                            <li><a href="/client">Registrarse</a></li>
 
                             </ul>
                         </div>

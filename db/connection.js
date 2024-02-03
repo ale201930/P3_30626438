@@ -6,6 +6,8 @@ const db = new sqlite3.Database('./db/databases.sqlite', (err) =>{
     db.run('CREATE TABLE IF NOT EXISTS imagen (id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT, producto_id INTEGER, destacado TEXT NOT NULL, FOREIGN KEY(producto_id) REFERENCES producto(id))');
     db.run('CREATE TABLE IF NOT EXISTS client (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL, pass TEXT NOT NULL)');
     db.run('CREATE TABLE IF NOT EXISTS compra (id INTEGER PRIMARY KEY AUTOINCREMENT, cliente_id INTEGER, producto_id INTEGER, cantidad INTEGER, total_pagado real, fecha TEXT, ip_cliente TEXT)');
+    db.run('CREATE TABLE IF NOT EXISTS calificacion (id INTEGER PRIMARY KEY AUTOINCREMENT, puntos REAL, producto_id INTEGER, FOREIGN KEY(producto_id) REFERENCES producto(id))');
+    db.run('CREATE TABLE IF NOT EXISTS puntaje (id INTEGER PRIMARY KEY AUTOINCREMENT, promedio REAL, producto_id INTEGER, FOREIGN KEY(producto_id) REFERENCES producto(id))');
 console.log('base de datos creada')
 });
 module.exports = db;

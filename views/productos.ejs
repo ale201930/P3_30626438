@@ -37,7 +37,7 @@
         <th>Cantidad</th>
         <th>Descripción</th>
         <th>Precio</th>
-        <th>Categoría</th>
+       
         <th>Opciones</th>
       </tr>
     </thead>
@@ -52,11 +52,7 @@
             <td><%= product.quantity %></td>
             <td><%= product.description %></td>
             <td><%= product.price %></td>
-            <td><% if(product.category_id == 1){ %>
-                    Marca
-                <% } else if(product.category_id == 2) { %>
-                   Generico
-            <% } %>
+           
             <td><a href="/edit_producto/<%=product.id%>" class="btn btn-dark">Editar</a>
               <a href="/delete/<%=product.id%>" class="btn btn-dark">Eliminar</a>
             </td>
