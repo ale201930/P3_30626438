@@ -306,7 +306,7 @@ router.post('/recuperativo', (req, res) => {
     //Lista de correos 
     to: [email],
     subject: 'Task 4: Additional features ',
-    text: "Ingrese en el siguiente link para recuperar su contraseña: https://lavamovil.onrender.com/client"
+    text: "Ingrese en el siguiente link para recuperar su contraseña: https://vitality-4qk4-8bhu.onrender.com/client"
   };
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
