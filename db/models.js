@@ -1,22 +1,51 @@
+
 const db = require('./connection');
 
 let querys = {
+    getsimoncitos: 'SELECT * FROM simoncito',
+    getsimoncitosID: 'SELECT * FROM simoncito WHERE id = ?',
+    insertsimoncitos: 'INSERT INTO simoncito (simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, municipio_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    updatesimoncitos: 'UPDATE simoncito SET simoncito = ?, codigo = ?, nombre = ?, direccion = ?, referencia = ?, escuela = ?, DEA = ?, director = ?, telefono = ?, correo = ?, municipio_id = ? WHERE id = ?',
+    deletesimoncitos: 'DELETE FROM simoncito WHERE id = ?',
+
+    getmunicipios: 'SELECT * FROM municipio',
+    getmunicipiosID: 'SELECT * FROM municipio WHERE id = ?',
+    insertmunicipios: 'INSERT INTO municipio (municipio) VALUES(?)',
+    updatemunicipios: 'UPDATE municipio SET municipio = ? WHERE id = ?',
+    deletemunicipios: 'DELETE FROM municipio WHERE id = ?',
+
+    getnomina: 'SELECT * FROM nomina',
+    getnominaID: 'SELECT * FROM nomina WHERE id = ?',
+    insertnomina: 'INSERT INTO nomina (nombre, apellido, cedula, n_niños, estatus, observacion, simoncito_id, municipio_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
+    updatenomina: 'UPDATE nomina SET nombre = ?, apellido = ?, cedula = ?, n_niños = ?, estatus = ?, observacion = ?, simoncito_id = ?, municipio_id = ?, WHERE id = ?',
+    deletenomina: 'DELETE FROM nomina WHERE id = ?',
+
+    getmatricula: 'SELECT * FROM matricula',
+    getmatriculaID: 'SELECT * FROM matricula WHERE id = ?',
+    insertmatricula: 'INSERT INTO matricula (simoncito_id, nomina_id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    updatematricula: 'UPDATE matricula SET simoncito_id = ?, nomina_id = ?, nombre_niño = ?, apellido_niño = ?, edad = ?, genero = ?, nombre_representante = ?, cedula = ?, parentesco = ?, telefono = ?, direccion = ?, WHERE id = ?',
+    deletematricula: 'DELETE FROM matricula WHERE id = ?',
+
+
+
+
     getproducto: 'SELECT * FROM producto',
     getproductoID: 'SELECT * FROM producto WHERE id = ?',
-    getproductoNO: 'SELECT * FROM producto ORDER BY name ASC',
-    getproductoDE: 'SELECT * FROM producto ORDER BY description ASC',
-    getproductoCA: 'SELECT * FROM producto ORDER BY category_id ASC',
-    getproductoMO: 'SELECT * FROM producto ORDER BY lab ASC',
-    getproductoPO: 'SELECT * FROM producto ORDER BY quantity ASC',
-    getproductoPU: 'SELECT * FROM producto JOIN puntaje ON producto.id = puntaje.producto_id ORDER BY promedio DESC',
+    getproductoNO: 'SELECT * FROM producto ORDER BY name DESC',
+    getproductoDE: 'SELECT * FROM producto ORDER BY description DESC',
+    getproductoCA: 'SELECT * FROM producto ORDER BY category_id DESC',
+    getproductoMO: 'SELECT * FROM producto ORDER BY model DESC',
+    getproductoPO: 'SELECT * FROM producto ORDER BY power DESC',
+    getproductoPU: 'SELECT * FROM producto JOIN promedio ON producto.id = promedio.producto_id ORDER BY promedio DESC',
     getimagenID: 'SELECT * FROM imagen WHERE id = ?',
-    insertproducto: 'INSERT INTO producto (code, name, lab, quantity, description, price, category_id) VALUES(?, ?, ?, ?, ?, ?, ?)',
+    insertproducto: 'INSERT INTO producto (code, name, power, model, description, price, category_id) VALUES(?, ?, ?, ?, ?, ?, ?)',
     getimagen: 'SELECT * FROM imagen',
+    getpromedio: 'SELECT * FROM promedio',
     getcategory: 'SELECT * FROM category',
     getcategoryID: 'SELECT * FROM category WHERE id = ?',
     insertimagen: 'INSERT INTO imagen (url, producto_id, destacado) VALUES(?, ?, ?)',
     insertcategory: 'INSERT INTO category(name) VALUES(?)',
-    updateproducto: 'UPDATE producto SET code = ?, name = ?, lab = ?, quantity = ?, description = ?, price = ?, category_id = ? WHERE id = ?',
+    updateproducto: 'UPDATE producto SET code = ?, name = ?, power = ?, model = ?, description = ?, price = ?, category_id = ? WHERE id = ?',
     updateimagen: 'UPDATE imagen SET url = ?, producto_id = ?, destacado = ? WHERE id = ?',
     updatecategory: 'UPDATE category SET name = ? WHERE id = ?',
     deleteproducto: 'DELETE FROM producto WHERE id = ?',
@@ -26,46 +55,203 @@ let querys = {
     getclient: 'SELECT * FROM client',
     getcompra: 'SELECT * FROM compra',
     insertcompra: 'INSERT INTO compra (cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente) VALUES(?, ?, ?, ?, ?, ?)',
-    insertpuntaje: 'INSERT INTO calificacion (puntos, producto_id) VALUES(?, ?)',
-    getpuntaje: 'SELECT * FROM puntaje'
+    insertpuntaje: 'INSERT INTO calificaciones (qualification, producto_id) VALUES(?, ?)'
+    
 }
 module.exports = {
-    getproducto(){
+
+    // simoncitos
+
+    getsimoncitos(){
         return new Promise((resolve, reject)=>{
-            db.all(querys.getproducto, (err,rows)=>{
+            db.all(querys.getsimoncitos, (err,rows)=>{
                 if(err) reject(err);
                 resolve(rows);
             })
         })
     },
 
-    getproductoPU(){
-        return new Promise((resolve, reject)=>{
-            db.all(querys.getproductoPU, (err,rows)=>{
-                if(err) reject(err);
-                resolve(rows);
-            })
-        })
-    },
-
-    getpuntaje(){
-        return new Promise((resolve, reject)=>{
-            db.all(querys.getpuntaje, (err,rows)=>{
-                if(err) reject(err);
-                resolve(rows);
-            })
-        })
-    },
-
-    insertpuntaje(puntos, producto_id){
+    insertsimoncitos(simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, municipio_id){
         return new Promise((resolve, reject) => {
-            db.run(querys.insertpuntaje, [puntos, producto_id], (err) => {
+            db.run(querys.insertsimoncitos, [simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, municipio_id], (err) => {
                 if(err) reject(err);
                     resolve()
             })
         })
     
     },
+
+    getsimoncitosID(id){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getsimoncitosID, [id], (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    updatesimoncitos(id, simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, municipio_id){
+        return new Promise((resolve, reject) => {
+            db.run(querys.updatesimoncitos, [simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, municipio_id, id], (err) => {
+                if(err) reject(err);
+                resolve();
+            })
+        })
+    },
+
+    deletesimoncitos(id){
+        return new Promise((resolve, reject) => {
+            db.run(querys.deletesimoncitos, [id], (err) => {
+                if(err) reject(err);
+                resolve();
+            })
+        })
+    },
+
+    // municipios 
+
+    getmunicipios(){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getmunicipios, (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    insertmunicipios(municipio){
+        return new Promise((resolve, reject) => {
+            db.run(querys.insertmunicipios, [municipio], (err) => {
+                if(err) reject(err);
+                    resolve()
+            })
+        })
+    
+    },
+
+    getmunicipiosID(id){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getmunicipiosID, [id], (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    updatemunicipios(id, municipio){
+        return new Promise((resolve, reject) => {
+            db.run(querys.updatemunicipios, [municipio, id], (err) => {
+                if(err) reject(err);
+                resolve();
+            })
+        })
+    },
+
+    deletemunicipios(id){
+        return new Promise((resolve, reject) => {
+            db.run(querys.deletemunicipios, [id], (err) => {
+                if(err) reject(err);
+                resolve();
+            })
+        })
+    },
+
+    // nomina
+
+    getnomina(){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getnomina, (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    insertnomina(nombre, apellido, cedula, n_niños, estatus, observacion, simoncito_id, municipio_id){
+        return new Promise((resolve, reject) => {
+            db.run(querys.insertnomina, [nombre, apellido, cedula, n_niños, estatus, observacion, simoncito_id, municipio_id], (err) => {
+                if(err) reject(err);
+                    resolve()
+            })
+        })
+    
+    },
+
+    getnominaID(id){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getnominaID, [id], (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    updatenomina(id, nombre, apellido, cedula, n_niños, estatus, observacion, simoncito_id, municipio_id){
+        return new Promise((resolve, reject) => {
+            db.run(querys.updatenomina, [nombre, apellido, cedula, n_niños, estatus, observacion, simoncito_id, municipio_id, id], (err) => {
+                if(err) reject(err);
+                resolve();
+            })
+        })
+    },
+
+    deletenomina(id){
+        return new Promise((resolve, reject) => {
+            db.run(querys.deletenomina, [id], (err) => {
+                if(err) reject(err);
+                resolve();
+            })
+        })
+    },
+
+    // matricula
+
+    getmatricula(){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getmatricula, (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    insertmatricula(simoncito_id, nomina_id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion){
+        return new Promise((resolve, reject) => {
+            db.run(querys.insertmatricula, [simoncito_id, nomina_id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion], (err) => {
+                if(err) reject(err);
+                    resolve()
+            })
+        })
+    
+    },
+
+    getmatriculaID(id){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getmatriculaID, [id], (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    updatematricula(id, simoncito_id, nomina_id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion){
+        return new Promise((resolve, reject) => {
+            db.run(querys.updatematricula, [simoncito_id, nomina_id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion, id], (err) => {
+                if(err) reject(err);
+                resolve();
+            })
+        })
+    },
+
+    deletematricula(id){
+        return new Promise((resolve, reject) => {
+            db.run(querys.deletematricula, [id], (err) => {
+                if(err) reject(err);
+                resolve();
+            })
+        })
+    },
+
 
     insertcompra(cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente){
         return new Promise((resolve, reject) => {
@@ -75,6 +261,25 @@ module.exports = {
             })
         })
     
+    },
+
+    insertpuntaje(qualification, producto_id){
+        return new Promise((resolve, reject) => {
+            db.run(querys.insertpuntaje, [qualification, producto_id], (err) => {
+                if(err) reject(err);
+                    resolve()
+            })
+        })
+    
+    },
+
+    getpromedio(){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getpromedio, (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
     },
 
     insertclient(email, pass){
@@ -105,26 +310,15 @@ module.exports = {
         })
     },
 
-    
-    insertproducto(code, name, lab, quantity, description, price, category_id){
-        return new Promise((resolve, reject) => {
-            db.run(querys.insertproducto, [code, name, lab, quantity, description, price, category_id], (err) => {
-                if(err) reject(err);
-                    resolve()
-            })
-        })
-    
-    },
-
-    getproductoID(id){
+    getproducto(){
         return new Promise((resolve, reject)=>{
-            db.all(querys.getproductoID, [id], (err,rows)=>{
+            db.all(querys.getproducto, (err,rows)=>{
                 if(err) reject(err);
                 resolve(rows);
             })
         })
     },
-
+    
     getproductoNO(){
         return new Promise((resolve, reject)=>{
             db.all(querys.getproductoNO, (err,rows)=>{
@@ -170,9 +364,37 @@ module.exports = {
         })
     },
 
-    updateproducto(id, code, name, lab, quantity, description, price, category_id){
+    getproductoPU(){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getproductoPU, (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    insertproducto(code, name, power, model, description, price, category_id){
         return new Promise((resolve, reject) => {
-            db.run(querys.updateproducto, [code, name, lab, quantity, description, price, category_id, id], (err) => {
+            db.run(querys.insertproducto, [code, name, power, model, description, price, category_id], (err) => {
+                if(err) reject(err);
+                    resolve()
+            })
+        })
+    
+    },
+
+    getproductoID(id){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getproductoID, [id], (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    updateproducto(id, code, name, power, model, description, price, category_id){
+        return new Promise((resolve, reject) => {
+            db.run(querys.updateproducto, [code, name, power, model, description, price, category_id, id], (err) => {
                 if(err) reject(err);
                 resolve();
             })

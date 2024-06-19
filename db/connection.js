@@ -1,13 +1,11 @@
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./db/databases.sqlite', (err) =>{
+const db = new sqlite3.Database('./db/database.sqlite', (err) =>{
     if(err) console.log(err);
-    db.run('CREATE TABLE IF NOT EXISTS category (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)'); 
-    db.run('CREATE TABLE IF NOT EXISTS producto (id INTEGER PRIMARY KEY AUTOINCREMENT, code INTEGER NOT NULL, name TEXT, lab TEXT, quantity INTEGER NOT NULL, description TEXT, price REAL NOT NULL, category_id INTEGER, FOREIGN KEY(category_id) REFERENCES category(id))');
-    db.run('CREATE TABLE IF NOT EXISTS imagen (id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT, producto_id INTEGER, destacado TEXT NOT NULL, FOREIGN KEY(producto_id) REFERENCES producto(id))');
-    db.run('CREATE TABLE IF NOT EXISTS client (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL, pass TEXT NOT NULL)');
-    db.run('CREATE TABLE IF NOT EXISTS compra (id INTEGER PRIMARY KEY AUTOINCREMENT, cliente_id INTEGER, producto_id INTEGER, cantidad INTEGER, total_pagado real, fecha TEXT, ip_cliente TEXT)');
-    db.run('CREATE TABLE IF NOT EXISTS calificacion (id INTEGER PRIMARY KEY AUTOINCREMENT, puntos REAL, producto_id INTEGER, FOREIGN KEY(producto_id) REFERENCES producto(id))');
-    db.run('CREATE TABLE IF NOT EXISTS puntaje (id INTEGER PRIMARY KEY AUTOINCREMENT, promedio REAL, producto_id INTEGER, FOREIGN KEY(producto_id) REFERENCES producto(id))');
+    db.run('CREATE TABLE IF NOT EXISTS simoncito (id INTEGER PRIMARY KEY AUTOINCREMENT, simoncito TEXT, codigo TEXT, nombre TEXT, direccion TEXT, referencia TEXT, escuela TEXT, DEA TEXT, director TEXT, telefono TEXT, correo TEXT, municipio_id INTEGER, FOREIGN KEY(municipio_id) REFERENCES municipio(id))');
+    db.run('CREATE TABLE IF NOT EXISTS municipio (id INTEGER PRIMARY KEY AUTOINCREMENT, municipio TEXT)');
+    db.run('CREATE TABLE IF NOT EXISTS nomina (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, apellido TEXT, cedula TEXT, n_niños INTEGER, estatus TEXT, observacion TEXT, simoncito_id INTEGER, municipio_id INTEGER, FOREIGN KEY(simoncito_id) REFERENCES simoncito(id), FOREIGN KEY(municipio_id) REFERENCES municipio(id))');
+
+    db.run('CREATE TABLE IF NOT EXISTS matricula (id INTEGER PRIMARY KEY AUTOINCREMENT, simoncito_id INTEGER, nomina_id INTEGER, nombre_niño TEXT, apellido_niño TEXT, edad INTEGER, genero TEXT, nombre_representante TEXT, cedula TEXT, parentesco TEXT, telefono TEXT, direccion TEXT,  FOREIGN KEY(simoncito_id) REFERENCES simoncito(id), FOREIGN KEY(nomina_id) REFERENCES nomina(id))');
 console.log('base de datos creada')
 });
-module.exports = db;
+module.exports = db; 

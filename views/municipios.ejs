@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  <title>Mostrando Categorías</title>
+  <title>Listado de municipios </title>
 </head>
 <body>
   <div class="container">
@@ -17,35 +17,32 @@
       </div>
 
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li class="nav-link px-2 link-secondary">LINEA BLANCA- Admin</li>
+        <li class="nav-link px-2 link-secondary">SENIFA Guarico</li>
       </ul>
 
       <div class="col-md-3 text-end">
         <a href="/" class="btn btn-primary">Salir</a>
       </div>
+      
     </header>
   </div>
   <div class="bd-example">
     <table class="table">
         <thead>
       <tr>
-        <th>ID</th>
-        <th>Url</th>
-        <th>Producto ID</th>
-        <th>destacado</th>
-
+        <th>Nombre del municipio</th>
+        
+        <th>Opciones</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <% imagen.forEach(image => { %>
+        <% municipio.forEach(municipio => { %>
           <tr>
-            <td><%= image.id %></td>
-           <td> <img alt="5" width="210" height="130" src="<%=image.url%>"> </td>
-            <td><%= image.producto_id%></td>
-            <td><%= image.destacado %></td>
-            <td><a href="/editima/<%=image.id%>" class="btn btn-dark">Editar</a>
-              <a href="/deleteima/<%=image.id%>" class="btn btn-dark">Eliminar</a>
+            <td><%= municipio.municipio %></td>
+
+            <td><a href="/edit_municipio/<%=municipio.id%>" class="btn btn-dark">Editar</a>
+              <a href="/delete_municipio/<%=municipio.id%>" class="btn btn-dark">Eliminar</a>
             </td>
           <% }); %></td>
 
@@ -56,7 +53,7 @@
     </table>
   </div>
 
-<a href="/insertima" class="btn btn-dark">Insertar Imagen</a>
+<a href="/insert_municipio" class="btn btn-dark">Insertar municipio</a>
 </tbody>
 
 </body>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar producto</title>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+</head>
+<body>
+
+    <form action="/edit_municipio/" method="post">
+        <input type="hidden" value="<%= municipio.id %>" name="id">
+
+        <label for="municipio">Municipio</label>
+        <input type="text" name="municipio" value="<%= municipio.municipio %>" placeholder="Municipio" required>
+
+    
+        <input type="submit" value="Guardar" href="/municipios">
+
+
+    </form>
+
+</body>
+</html>

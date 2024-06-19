@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar simoncito</title>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+</head>
+<body>
+
+    <form action="/edit/" method="post">
+        <input type="hidden" value="<%= simoncitos.id %>" name="id">
+
+        <label for="simoncito">Simoncito</label>
+        <input type="text" name="simoncito" value="<%= simoncitos.simoncito %>" placeholder="Simoncito" required>
+
+        <label for="codigo">Codigo</label>
+        <input type="text" name="codigo" value="<%= simoncitos.codigo %>" placeholder="Codigo del simoncito" required>
+
+        <label for="nombre">Nombre</label>
+        <input type="text" name="nombre" value="<%= simoncitos.nombre %>" placeholder="Nombre del simoncito" required>
+
+        <label for="direccion">Direccion</label>
+        <textarea type="text" name="direccion" value="<%= simoncitos.direccion %>" placeholder="Direccion del simoncito" required></textarea>
+
+        <label for="referencia">Referencia</label>
+        <input type="text" name="referencia" value="<%= simoncitos.referencia %>" placeholder="Referencia del simoncito" required>
+
+        <label for="escuela">Escuela</label>
+        <input type="text" name="escuela" value="<%= simoncitos.escuela %>" placeholder="Escuela vinculante" required>
+
+        <label for="DEA">DEA</label>
+        <input type="text" name="DEA" value="<%= simoncitos.DEA %>" placeholder="DEA del simoncito" required>
+
+        <label for="director">Director</label>
+        <input type="text" name="director" value="<%= simoncitos.director %>" placeholder="Director del simoncito" required>
+
+        <label for="telefono">Telefono</label>
+        <input type="text" name="telefono" value="<%= simoncitos.telefono %>" placeholder="Telefono de simoncito" required>
+
+        <label for="correo">Correo</label>
+        <input type="email" name="correo" value="<%= simoncitos.correo %>" placeholder="Correo del simoncito" required>
+
+        <input type="submit" value="Guardar" href="/index">
+
+
+    </form>
+
+</body>
+</html>
