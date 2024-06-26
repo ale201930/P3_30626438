@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insertar nomina</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="../stylesheets/style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+      <div class="col-md-3 mb-2 mb-md-0">
+        <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+          <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+        </a>
+        <a href="/nomina" class="btn btn-primary">Volver</a>
+      </div>
+
+      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <li class="nav-link px-2 link-secondary">SENIFA Guarico</li>
+      </ul>
+
+      <div class="col-md-3 text-end">
+        <a href="/" class="btn btn-primary">Salir</a>
+      </div>
+      
+    </header>
+  </div>
+
+    <form action="/insert_nomina" method="post">
+        <label for="nombre">Nombre</label>
+        <input type="text" name="nombre" value="" placeholder="Nombre" required>
+
+        <label for="apellido">Apellido</label>
+        <input type="text" name="apellido" value="" placeholder="Apellido" required>
+
+        <label for="cedula">Cedula</label>
+        <input type="text" name="cedula" value="" placeholder="Cedula" required>
+
+        <label for="n_niños">Numero de niños</label>
+        <input type="number" name="n_niños" value="" placeholder="Numero de niños" required>
+
+        <label for="cargo">Cargo</label>
+        <input type="text" name="cargo" value="" placeholder="Cargo" required>
+
+        <label for="estatus">Estatus</label>
+        <input type="text" name="estatus" value="" placeholder="Estatus" required>
+
+        <label for="correo">Correo</label>
+        <input type="email" name="correo" value="" placeholder="Correo" required>
+
+        <label for="telefono">Telefono</label>
+        <input type="text" name="telefono" value="" placeholder="Telefono" required>
+
+        <label for="cuenta_bancaria">Cuenta bancaria</label>
+        <input type="text" name="cuenta_bancaria" value="" placeholder="Cueta bancaria" required>
+
+        <select id="simoncito" name="simoncito_id" required>
+            <% simoncito.forEach(simoncito => { %>
+              <option value="<%= simoncito.id %>"><%= simoncito.nombre %></option>
+            <% }) %>
+          </select>
+
+        <input type="submit" value="Insertar" href="/nomina">
+    
+    </form> 
+    
+</body>
+</html>

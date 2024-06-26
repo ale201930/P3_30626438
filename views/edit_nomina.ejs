@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar nomina</title>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+</head>
+<body>
+ 
+    <form action="/edit_nomina/" method="post">
+        <input type="hidden" value="<%= nomina.id %>" name="id">
+
+        <label for="nombre">Nombre</label>
+        <input type="text" name="nombre" value="<%= nomina.nombre %>" placeholder="Nombre" required>
+
+        <label for="apellido">Apellido</label>
+        <input type="text" name="apellido" value="<%= nomina.apellido %>" placeholder="Apellido" required>
+
+        <label for="cedula">Cedula</label>
+        <input type="text" name="cedula" value="<%= nomina.cedula %>" placeholder="Cedula" required>
+
+        <label for="n_niños">Numero de niños</label>
+        <input type="number" name="n_niños" value="<%= nomina.n_niños %>" placeholder="Numero de niños" required>
+
+        <label for="cargo">Cargo</label>
+        <input type="text" name="cargo" value="<%= nomina.cargo %>" placeholder="Cargo" required>
+
+        <label for="estatus">Estatus</label>
+        <input type="text" name="estatus" value="<%= nomina.estatus %>" placeholder="Estatus" required>
+
+        <label for="correo">Correo</label>
+        <input type="email" name="correo" value="<%= nomina.correo %>" placeholder="Correo" required>
+
+        <label for="telefono">Telefono</label>
+        <input type="text" name="telefono" value="<%= nomina.telefono %>" placeholder="Telefono" required>
+
+        <label for="cuenta_bancaria">Cuenta bancaria</label>
+        <input type="text" name="cuenta_bancaria" value="<%= nomina.cuenta_bancaria %>" placeholder="Cueta bancaria" required>
+
+        <input type="submit" value="Guardar" href="/index">
+
+
+    </form>
+
+</body>
+</html>

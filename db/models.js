@@ -16,8 +16,8 @@ let querys = {
 
     getnomina: 'SELECT * FROM nomina',
     getnominaID: 'SELECT * FROM nomina WHERE id = ?',
-    insertnomina: 'INSERT INTO nomina (nombre, apellido, cedula, n_niños, estatus, observacion, simoncito_id, municipio_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
-    updatenomina: 'UPDATE nomina SET nombre = ?, apellido = ?, cedula = ?, n_niños = ?, estatus = ?, observacion = ?, simoncito_id = ?, municipio_id = ?, WHERE id = ?',
+    insertnomina: 'INSERT INTO nomina (nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, simoncito_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    updatenomina: 'UPDATE nomina SET nombre = ?, apellido = ?, cedula = ?, n_niños = ?, cargo = ?, estatus = ?, correo = ?, telefono = ?, cuenta_bancaria = ?, simoncito_id = ? WHERE id = ?',
     deletenomina: 'DELETE FROM nomina WHERE id = ?',
 
     getmatricula: 'SELECT * FROM matricula',
@@ -167,9 +167,9 @@ module.exports = {
         })
     },
 
-    insertnomina(nombre, apellido, cedula, n_niños, estatus, observacion, simoncito_id, municipio_id){
+    insertnomina(nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, simoncito_id ){
         return new Promise((resolve, reject) => {
-            db.run(querys.insertnomina, [nombre, apellido, cedula, n_niños, estatus, observacion, simoncito_id, municipio_id], (err) => {
+            db.run(querys.insertnomina, [nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, simoncito_id ], (err) => {
                 if(err) reject(err);
                     resolve()
             })
@@ -186,9 +186,9 @@ module.exports = {
         })
     },
 
-    updatenomina(id, nombre, apellido, cedula, n_niños, estatus, observacion, simoncito_id, municipio_id){
+    updatenomina(id, nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, simoncito_id){
         return new Promise((resolve, reject) => {
-            db.run(querys.updatenomina, [nombre, apellido, cedula, n_niños, estatus, observacion, simoncito_id, municipio_id, id], (err) => {
+            db.run(querys.updatenomina, [nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, simoncito_id, id], (err) => {
                 if(err) reject(err);
                 resolve();
             })

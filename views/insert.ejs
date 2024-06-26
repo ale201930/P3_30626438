@@ -59,8 +59,14 @@
         <label for="correo">Correo</label>
         <input type="email" name="correo" value="" placeholder="Correo del simoncito" required>
 
-        
-        
+      
+
+        <select id="municipio" name="municipio_id" required>
+          <% municipio.forEach(municipio => { %>
+            <option value="<%= municipio.id %>"><%= municipio.municipio %></option>
+          <% }) %>
+        </select>
+
         <input type="submit" value="Insertar" href="/index">
     
     </form> 

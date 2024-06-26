@@ -143,15 +143,22 @@ router.get('/index', (req, res) => {
 });
 
 router.get('/insert', (req, res) => {
-  res.render('insert')
+  db.getmunicipios()
+    .then(data => {        
+      console.log(data)
+      res.render('insert', { municipio: data });
+  })
+  .catch(err => {
+      res.render('insert', { municipio: [] });
+  })
 });
 
 router.post('/insert', (req, res) => {
-  const {simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo} = req.body;
-  console.log(simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo);
-  db.insertsimoncitos(simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo)
+  const {simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, municipio_id} = req.body;
+  console.log(simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, municipio_id);
+  db.insertsimoncitos(simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, municipio_id)
   .then(() => {
-     res.render('insert')
+     res.redirect('insert')
   })
   .catch(err => {
     console.log(err);
@@ -188,6 +195,77 @@ router.get('/delete/:id', (req, res)=>{
   db.deletesimoncitos(id)
     .then(() => {
     res.redirect('/index');
+  })
+  .catch(err => {
+  console.log(err);
+  });
+})
+
+// nomina
+router.get('/nomina', (req, res) => {
+  db.getnomina()
+    .then(data => {        
+      console.log(data)
+      res.render('nomina', { nomina: data });
+  })
+  .catch(err => {
+      res.render('nomina', { nomina: [] });
+  })
+});
+
+router.get('/insert_nomina', (req, res) => {
+  db.getsimoncitos()
+    .then(data => {        
+      console.log(data)
+      res.render('insert_nomina', { simoncito: data });
+  })
+  .catch(err => {
+      res.render('insert_nomina', { simoncito: [] });
+  })
+});
+
+router.post('/insert_nomina', (req, res) => {
+  const {nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, simoncito_id} = req.body;
+  console.log(nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, simoncito_id);
+  db.insertnomina(nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, simoncito_id)
+  .then(() => {
+     res.redirect('insert_nomina')
+  })
+  .catch(err => {
+    console.log(err);
+  })
+});
+
+router.get('/edit_nomina/:id', (req, res)=>{
+  const id = req.params.id
+  db.getnominaID(id)
+  .then(data =>{
+    console.log(data)
+    res.render('edit_nomina', {nomina: data[0]})
+  })
+    .catch(err =>{
+      console.log(err);
+      res.render('edit_nomina', {nomina: []})
+    })   
+})
+
+router.post('/edit_nomina/', (req, res)=>{
+  const {id, nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria} = req.body;
+  db.updatenomina(id, nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria)
+  .then(() =>{
+    res.redirect('/nomina');
+  })
+  .catch(err =>{
+    console.log(err);
+
+  })
+});
+
+router.get('/delete_nomina/:id', (req, res)=>{
+  const id = req.params.id;
+  db.deletenomina(id)
+    .then(() => {
+    res.redirect('/nomina');
   })
   .catch(err => {
   console.log(err);
