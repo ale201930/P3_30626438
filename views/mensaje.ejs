@@ -24,7 +24,7 @@
         </div>
 
        <div>
-        <img src="../images/F8j0ABxWwAAHwb9-removebg-preview.png" alt="200" width="100">
+        <img src="../images/F8j0ABxWwAAHwb9-removebg-preview.png" alt="100" width="90">
        </div>
       </div>
     </div>
@@ -33,35 +33,9 @@
       <nav class="navbar container">
         <i class="fa-solid fa-bars"></i>
         <ul class="menu">
-          <li><a href="/">Inicio</a></li>
-          <li><a href="/mision">Mision</a></li>
-          <li><a href="/vision">Vision</a></li>
-          <li><a href="/proyecciones">Proyecciones</a></li>
-          <li><a href="/login">Administracion</a></li>
-          <li><a href="/logros">Logros</a></li>
+        
+          <li> <a href="/administrar">Volver al menú</a></li>
           <li><a href="/blog">Blog</a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          <li><a href="/blog"></a></li>
-          
-          
-          
-
-         
         </ul>
 
         
@@ -69,18 +43,22 @@
     </div>
   </header>
 
-  <section class="banner_m">
-    
-    <div class="content-banner_m">
-      <h2><%= mensaje %></h2>
-      <div class="container-index">
-      
-        
-    
-    </div>
-  </section>
+  <div class="container_login">
+    <form action="/mensaje" method="post">
+      <h1 class="contariner">Ingrese mensaje</h1>
+      <div class="form-group">
+         <br><br>
+         <input type="text" name="mensaje" id="mensaje">
+         
+      </div>
+     
+      <div class="form-group">
+          <button type="submit" href="/mensaje">Guardar</button>
+      </div>
+  </form>
 
- 
+</div>
+
 
   <footer class="footer">
     <div class="container container-footer">

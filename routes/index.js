@@ -3,6 +3,7 @@ const request = require ('request');
 var router = express.Router();
 const db = require('../db/models');
 require('dotenv').config()
+let mensaje;
 
 // vista principal
 router.get('/', (req, res) => {
@@ -38,7 +39,7 @@ router.get('/logros', function(req, res, next) {
 
 // blog
 router.get('/blog', function(req, res, next) {
-  res.render('blog');
+  res.render('blog', { mensaje } );
 });
 
 // nosotros
@@ -57,14 +58,49 @@ router.post('/login', function(req, res, next) {
   if (user == process.env.user && pass == process.env.clave)  {
       res.render('administrar');
   } else {
+    
+    if (user == process.env.user1 && pass == process.env.clave1)  {
+      res.render('administrar1');
+  } else {
     res.render('login', { error: 'Datos incorrectos' });
   }
+
+  }
+})
+
+//mensaje
+router.get('/mensaje', (req, res) =>{
+  res.render('mensaje')
+})
+
+router.post('/mensaje', function(req, res, next) {
+  mensaje = req.body.mensaje
+  
+  res.render('blog', { mensaje});
+
 })
 
 // administrar
 router.get('/administrar', (req, res) =>{
   res.render('administrar')
 })
+
+// administrar1
+router.get('/administrar1', (req, res) =>{
+  res.render('administrar1')
+})
+
+//municipios1
+router.get('/municipios1', (req, res) => {
+  db.getmunicipios()
+    .then(data => {        
+      console.log(data)
+      res.render('municipios1', { municipio: data });
+  })
+  .catch(err => {
+      res.render('municipios1', { municipio: [] });
+  })
+});
 
 // municipios
 router.get('/municipios', (req, res) => {
@@ -129,6 +165,18 @@ router.get('/delete_municipio/:id', (req, res)=>{
   console.log(err);
   });
 })
+
+//simoncitos1
+router.get('/index1', (req, res) => {
+  db.getsimoncitos()
+    .then(data => {        
+      console.log(data)
+      res.render('index1', { simoncito: data });
+  })
+  .catch(err => {
+      res.render('index1', { simoncito: [] });
+  })
+});
 
 // simoncitos
 router.get('/index', (req, res) => {
@@ -201,6 +249,18 @@ router.get('/delete/:id', (req, res)=>{
   });
 })
 
+//nomina1
+router.get('/nomina1', (req, res) => {
+  db.getnomina()
+    .then(data => {        
+      console.log(data)
+      res.render('nomina1', { nomina: data });
+  })
+  .catch(err => {
+      res.render('nomina1', { nomina: [] });
+  })
+});
+
 // nomina
 router.get('/nomina', (req, res) => {
   db.getnomina()
@@ -257,7 +317,6 @@ router.post('/edit_nomina/', (req, res)=>{
   })
   .catch(err =>{
     console.log(err);
-
   })
 });
 
@@ -266,6 +325,138 @@ router.get('/delete_nomina/:id', (req, res)=>{
   db.deletenomina(id)
     .then(() => {
     res.redirect('/nomina');
+  })
+  .catch(err => {
+  console.log(err);
+  });
+})
+
+router.get('/madre/:id', (req, res)=>{
+  const id = req.params.id
+  db.getnominaID(id)
+  .then(data =>{
+
+    db.getsimoncitos()
+    .then (simoncito => { 
+
+
+      
+      res.render ('madre', { nomina: data[0], simoncito: simoncito});
+    })
+    .catch (err => {
+      res.render ('madre', { nomina: data[0], simoncito: []});
+    })
+
+  })     
+  
+    .catch(err =>{
+      console.log(err);
+      res.render('madre', {nomina: []})
+    })   
+})
+
+router.get('/madre1/:id', (req, res)=>{
+  const id = req.params.id
+  db.getnominaID(id)
+  .then(data =>{
+
+    db.getsimoncitos()
+    .then (simoncito => { 
+
+
+      
+      res.render ('madre1', { nomina: data[0], simoncito: simoncito});
+    })
+    .catch (err => {
+      res.render ('madre1', { nomina: data[0], simoncito: []});
+    })
+
+  })     
+  
+    .catch(err =>{
+      console.log(err);
+      res.render('madre1', {nomina: []})
+    })   
+})
+
+//matricula1
+router.get('/matricula1', (req, res) => {
+  db.getmatricula()
+    .then(data => {        
+      console.log(data)
+      res.render('matricula1', { matricula: data });
+  })
+  .catch(err => {
+      res.render('matricula1', { matricula: [] });
+  })
+});
+
+
+//matricula
+router.get('/matricula', (req, res) => {
+  db.getmatricula()
+    .then(data => {        
+      console.log(data)
+      res.render('matricula', { matricula: data });
+  })
+  .catch(err => {
+      res.render('matricula', { matricula: [] });
+  })
+});
+
+router.get('/insert_matricula', (req, res) => {
+  db.getnomina()
+    .then(data => {        
+      console.log(data)
+      res.render('insert_matricula', { nomina: data });
+  })
+  .catch(err => {
+      res.render('insert_matricula', { nomina: [] });
+  })
+});
+
+router.post('/insert_matricula', (req, res) => {
+  const {nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion, nomina_id} = req.body;
+  console.log(nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion, nomina_id);
+  db.insertmatricula(nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion, nomina_id)
+  .then(() => {
+     res.redirect('insert_matricula')
+  })
+  .catch(err => {
+    console.log(err);
+  })
+});
+
+router.get('/edit_matricula/:id', (req, res)=>{
+  const id = req.params.id
+  db.getmatriculaID(id)
+  .then(data =>{
+    console.log(data)
+    res.render('edit_matricula', {matricula: data[0]})
+  })
+    .catch(err =>{
+      console.log(err);
+      res.render('edit_matricula', {matricula: []})
+    })   
+})
+
+router.post('/edit_matricula/', (req, res)=>{
+  const {id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion} = req.body;
+  db.updatematricula(id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion)
+  .then(() =>{
+    res.redirect('/matricula');
+  })
+  .catch(err =>{
+    console.log(err);
+
+  })
+});
+
+router.get('/delete_matricula/:id', (req, res)=>{
+  const id = req.params.id;
+  db.deletematricula(id)
+    .then(() => {
+    res.redirect('/matricula');
   })
   .catch(err => {
   console.log(err);

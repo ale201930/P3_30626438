@@ -5,8 +5,10 @@ let querys = {
     getsimoncitos: 'SELECT * FROM simoncito',
     getsimoncitosID: 'SELECT * FROM simoncito WHERE id = ?',
     insertsimoncitos: 'INSERT INTO simoncito (simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, municipio_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    updatesimoncitos: 'UPDATE simoncito SET simoncito = ?, codigo = ?, nombre = ?, direccion = ?, referencia = ?, escuela = ?, DEA = ?, director = ?, telefono = ?, correo = ?, municipio_id = ? WHERE id = ?',
+    updatesimoncitos: 'UPDATE simoncito SET simoncito = ?, codigo = ?, nombre = ?, direccion = ?, referencia = ?, escuela = ?, DEA = ?, director = ?, telefono = ?, correo = ? WHERE id = ?',
     deletesimoncitos: 'DELETE FROM simoncito WHERE id = ?',
+    getproductoMU: 'SELECT * FROM producto WHERE municipio_id = ?',
+
 
     getmunicipios: 'SELECT * FROM municipio',
     getmunicipiosID: 'SELECT * FROM municipio WHERE id = ?',
@@ -17,13 +19,13 @@ let querys = {
     getnomina: 'SELECT * FROM nomina',
     getnominaID: 'SELECT * FROM nomina WHERE id = ?',
     insertnomina: 'INSERT INTO nomina (nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, simoncito_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    updatenomina: 'UPDATE nomina SET nombre = ?, apellido = ?, cedula = ?, n_niños = ?, cargo = ?, estatus = ?, correo = ?, telefono = ?, cuenta_bancaria = ?, simoncito_id = ? WHERE id = ?',
+    updatenomina: 'UPDATE nomina SET nombre = ?, apellido = ?, cedula = ?, n_niños = ?, cargo = ?, estatus = ?, correo = ?, telefono = ?, cuenta_bancaria = ? WHERE id = ?',
     deletenomina: 'DELETE FROM nomina WHERE id = ?',
 
     getmatricula: 'SELECT * FROM matricula',
     getmatriculaID: 'SELECT * FROM matricula WHERE id = ?',
-    insertmatricula: 'INSERT INTO matricula (simoncito_id, nomina_id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    updatematricula: 'UPDATE matricula SET simoncito_id = ?, nomina_id = ?, nombre_niño = ?, apellido_niño = ?, edad = ?, genero = ?, nombre_representante = ?, cedula = ?, parentesco = ?, telefono = ?, direccion = ?, WHERE id = ?',
+    insertmatricula: 'INSERT INTO matricula (nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion, nomina_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    updatematricula: 'UPDATE matricula SET nombre_niño = ?, apellido_niño = ?, edad = ?, genero = ?, nombre_representante = ?, cedula = ?, parentesco = ?, telefono = ?, direccion = ? WHERE id = ?',
     deletematricula: 'DELETE FROM matricula WHERE id = ?',
 
 
@@ -90,9 +92,18 @@ module.exports = {
         })
     },
 
-    updatesimoncitos(id, simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, municipio_id){
+    getsimoncitosMU(municipio_id){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getsimoncitosMU, [municipio_id], (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+
+    updatesimoncitos(id, simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo){
         return new Promise((resolve, reject) => {
-            db.run(querys.updatesimoncitos, [simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, municipio_id, id], (err) => {
+            db.run(querys.updatesimoncitos, [simoncito, codigo, nombre, direccion, referencia, escuela, DEA, director, telefono, correo, id], (err) => {
                 if(err) reject(err);
                 resolve();
             })
@@ -186,9 +197,9 @@ module.exports = {
         })
     },
 
-    updatenomina(id, nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, simoncito_id){
+    updatenomina(id, nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria){
         return new Promise((resolve, reject) => {
-            db.run(querys.updatenomina, [nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, simoncito_id, id], (err) => {
+            db.run(querys.updatenomina, [nombre, apellido, cedula, n_niños, cargo, estatus, correo, telefono, cuenta_bancaria, id], (err) => {
                 if(err) reject(err);
                 resolve();
             })
@@ -215,9 +226,9 @@ module.exports = {
         })
     },
 
-    insertmatricula(simoncito_id, nomina_id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion){
+    insertmatricula(nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion, nomina_id){
         return new Promise((resolve, reject) => {
-            db.run(querys.insertmatricula, [simoncito_id, nomina_id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion], (err) => {
+            db.run(querys.insertmatricula, [nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion, nomina_id], (err) => {
                 if(err) reject(err);
                     resolve()
             })
@@ -234,9 +245,9 @@ module.exports = {
         })
     },
 
-    updatematricula(id, simoncito_id, nomina_id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion){
+    updatematricula(id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion){
         return new Promise((resolve, reject) => {
-            db.run(querys.updatematricula, [simoncito_id, nomina_id, nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion, id], (err) => {
+            db.run(querys.updatematricula, [nombre_niño, apellido_niño, edad, genero, nombre_representante, cedula, parentesco, telefono, direccion, id], (err) => {
                 if(err) reject(err);
                 resolve();
             })

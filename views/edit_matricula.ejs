@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar matricula</title>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+</head>
+<body>
+ 
+    <form action="/edit_matricula/" method="post">
+        <input type="hidden" value="<%= matricula.id %>" name="id">
+
+        <label for="nombre_niño">Nombre</label>
+        <input type="text" name="nombre_niño" value="<%= matricula.nombre_niño %>" placeholder="Nombre" required>
+
+        <label for="apellido_niño">Apellido</label>
+        <input type="text" name="apellido_niño" value="<%= matricula.apellido_niño %>" placeholder="Apellido" required>
+
+        <label for="edad">Edad</label>
+        <input type="number" name="edad" value="<%= matricula.edad %>" placeholder="Edad" required>
+
+        <label for="genero">Genero</label>
+        <input type="text" name="genero" value="<%= matricula.genero %>" placeholder="Genero" required>
+
+        <label for="nombre_representante">Representante</label>
+        <input type="text" name="nombre_representante" value="<%= matricula.nombre_representante %>" placeholder="Representante" required>
+
+        <label for="cedula">Cedula</label>
+        <input type="text" name="cedula" value="<%= matricula.cedula %>" placeholder="Cedula" required>
+
+        <label for="parentesco">Parentesco</label>
+        <input type="text" name="parentesco" value="<%= matricula.parentesco %>" placeholder="Parentesco" required>
+
+        <label for="telefono">Telefono</label>
+        <input type="text" name="telefono" value="<%= matricula.telefono %>" placeholder="Telefono" required>
+
+        <label for="direccion">Direccion</label>
+        <input type="text" name="direccion" value="<%= matricula.direccion %>" placeholder="Direccion" required>
+
+        <input type="submit" value="Guardar" href="/index">
+
+
+    </form>
+
+</body>
+</html>

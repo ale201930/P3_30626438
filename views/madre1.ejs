@@ -13,7 +13,7 @@
         <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
           <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
         </a>
-        <a href="/administrar" class="btn btn-primary">Volver al menú</a>
+        <a href="/nomina1" class="btn btn-primary">Volver</a>
       </div>
 
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
@@ -27,43 +27,60 @@
     </header>
   </div>
   <div class="bd-example">
+
+    
     <table class="table">
         <thead>
       <tr>
         <th>Nombre</th>
             <th>Apellido</th>
             <th>Cedula</th>
+            <th>Numero de niños</th>
             <th>Cargo</th>
+            <th>Estatus</th>
             <th>Correo</th>
-        <th>Opciones</th>
+            <th>Telefono</th>
+            <th>Cueta bancaria</th>
+            <th>Simoncito</th>
+           
+            
+       
       </tr>
     </thead>
     <tbody>
       <tr>
-        <% nomina.forEach(nomina => { %>
+       
           <tr>
-            <td><a href="/madre/<%=nomina.id%>"><%= nomina.nombre %></a></td>
+            <td><%= nomina.nombre %></a></td>
             <td><%= nomina.apellido %></td> 
             <td><%= nomina.cedula %></td>
+            <td><%= nomina.n_niños %></td>
             <td><%= nomina.cargo %></td>
+            <td><%= nomina.estatus %></td>
             <td><%= nomina.correo %></td>
-           
-            
-            
-            <td><a href="/edit_nomina/<%=nomina.id%>" class="btn btn-dark">Editar</a>
-              <a href="/delete_nomina/<%=nomina.id%>" class="btn btn-dark">Eliminar</a>
-            </td>
-          <% }); %></td>
-
+            <td><%= nomina.telefono %></td>
+            <td><%= nomina.cuenta_bancaria %></td>
+            <td> <% simoncito.forEach(simoncito => { %>
+                <% if(simoncito.id == nomina.simoncito_id) { %>
+                 
+                   
+                    <%= simoncito.nombre %>
+                    
+                
+                <% } else { %>
+                   <p></p>
+                <% }%>
+                <% }); %></td>
 
       </tr>
     </tbody>
   
     </table>
-  </div>
 
-<a href="/insert_nomina" class="btn btn-dark">Insertar nomina</a>
-</tbody>
+    
+  </div>
+  
+
 
 </body>
 </html>
